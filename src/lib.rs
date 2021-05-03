@@ -1,3 +1,5 @@
+
+#[derive(Debug)]
 pub struct Blobservation {
     grid: Vec<Vec<u32>>,
 }
@@ -8,7 +10,6 @@ impl Blobservation {
     }
     pub fn read(&mut self, instructions: &str) {
         fn tilt_sequence(vec: Vec<u32>, len: usize) -> Vec<u32> {
-            println!("tilt_sequence input vec {:?} and input len {}",vec,len);
             let result = vec.iter().fold(vec![vec![]], |mut v: Vec<Vec<u32>>, x| {
                 match v.last_mut().unwrap().last_mut() {
                     Some(last) if x >= last => v.push(vec![*x]),
@@ -23,7 +24,6 @@ impl Blobservation {
             while result.len() != len {
                 result.push(0);
             }
-            println!("tilt_sequence result vec {:?}",result);
             result
         }
         fn tilt(vec: &mut Vec<Vec<u32>>, dir: char) {
@@ -36,7 +36,10 @@ impl Blobservation {
                         .filter(|&x| x != 0)
                         .collect();
                     let temp = tilt_sequence(temp, cols);
-                    (0..rows).for_each(|row| vec[row][col] = temp[row].clone());
+                    (0..rows).for_each(|row| {
+                        vec[row][col] = temp[row].clone();
+                    }
+                        );
                 });
                     if vec.last().unwrap().iter().all(|&x| x == 0) {
                         vec.pop();
